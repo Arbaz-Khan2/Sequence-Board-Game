@@ -1,0 +1,214 @@
+cards.map((element, index) => {
+                let rank = element.slice(10,11)
+                if (element.slice(11,12) >= "0" && element.slice(11,12) <= "9")
+                {
+                  rank = element.slice(10,12)
+                }
+                if(element.includes("spades"))
+                {
+                  return (
+                    <div>
+                      <li>
+                        <div class={element}>
+                          <span class="rank">{rank}</span><span class="suit">♠</span>
+                        </div>
+                      </li>
+                    </div>
+                  );
+                }
+                else if(element.includes("diams"))
+                {
+                  return (
+                    <div>
+                      <li>
+                        <div class={element}>
+                          <span class="rank">{rank}</span><span class="suit">♦</span>
+                        </div>
+                      </li>
+                    </div>
+                  );
+                }
+                else if(element.includes("clubs"))
+                {
+                  return (
+                    <div>
+                      <li>
+                        <div class={element}>
+                          <span class="rank">{rank}</span><span class="suit">♣</span>
+                        </div>
+                      </li>
+                    </div>
+                  );
+                }
+                else if(element.includes("hearts"))
+                {
+                  return (
+                    <div>
+                      <li>
+                        <div class={element}>
+                          <span class="rank">{rank}</span><span class="suit">♥</span>
+                        </div>
+                      </li>
+                    </div>
+                  );
+                }
+              })
+
+
+
+
+
+
+const ws = new WebSocket(`ws://localhost:8080`);
+
+const Sequence = () => {
+  const [board, setBoard] = React.useState([[]]);
+  const [positionBoard, setPositionBoard] = React.useState([[]]);
+  const [cards, setCards] = React.useState([]);
+
+  let diamondSign = "♦";
+  let heartSign = "♥";
+  let spadesSign = "♠";
+  let clubsSign = "♣";
+
+  ws.onmessage = (event) => {
+    console.log(`received: ${event.data}`)
+    const msg = JSON.parse(event.data)
+    if (msg.type===`newboard`){
+      setBoard(msg.board)
+      setPositionBoard(msg.positionBoard)
+    }
+    // console.log(grid)
+}
+
+function hello(){
+  console.log("Here")
+  return <div className = "Card"><div className = "blue"></div></div>
+}
+
+  return (
+    <div>
+      <div class="container">{
+        board.map((rows) => (
+          <div>
+          <div className={"playingCards fourColours rotateHand"}>
+            <ul class="table">
+              {rows.map((row) => {
+                if (row === 'card back')
+                  return <div><li><div className = {row}><span className={"rank"}></span></div></li></div>
+                else
+                  console.log(row.slice(12,13))
+                  let a = row.slice(10,11)
+                  let b = row.slice(12,13)
+                  if(b === 'c'){
+                    return <div><li><div onClick={hello} className = {row}>{a}<span className={"suit"}>♣</span></div></li></div>
+                  }
+                  if(b === 'd'){
+                    return <div><li><div onClick={hello} className = {row}>{a}<span className={"suit"}>♦</span></div></li></div>
+                  }
+                  if(b === 'h'){
+                    return <div><li><div onClick={hello} className = {row}>{a}<span className={"suit"}>♥</span></div></li></div>
+                  }
+                  if(b === 's'){
+                    return <div><li><div onClick={hello} className = {row}>{a}<span className={"suit"}>♠</span></div></li></div>
+                  }
+                  return <div><li><div onClick={hello} className = {row}>{a}<span className={"suit"}>{b}</span></div></li></div>
+          })}
+            </ul>
+          </div>
+          </div>
+          ))
+      }</div>
+      <div class="container">
+        <div>
+          <h1>Your Cards:</h1>
+        </div>
+        {/* code for client cards comes here */}
+        {/* {<div className = "text_box"> Hello </div>} */}
+        {/* {<div className = "color green" ></div>} */}
+      </div>
+    </div>
+    
+  );
+};
+
+ReactDOM.render(<Sequence />, document.querySelector(`#root`));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+element == "card back" ? <div class="card back"><span class="rank"></span></div> : <div class={element}> <span class="rank">{element.slice(10,11)}</span><span class={element.slice(12,)}>♠</span> </div>
+
+
+
+
+
+<div>
+      <div class="container">{
+        
+      board.map((column, colnumber) => {
+        <div class="playingCards fourColours rotateHand">
+        <ul class="table">
+          {column.map((element, index) => {
+            <div>
+            <li>
+                <div class="card back"><span class="rank"></span></div>
+            </li>
+            </div>
+        })}
+        </ul>
+        </div>
+      })
+      }</div>
+      <div class="container">
+        <div>
+          <h1>Your Cards:</h1>
+        </div>
+        {/* code for client cards comes here */}
+        {/* code for text box comes here */}
+        {/* code for circle representing the players team color comes here */}
+      </div>
+    </div>
+
+
+
+<div>
+      <div class="container">
+      {board.map((items) => {
+        return (
+          <div class="playingCards fourColours rotateHand">
+            <ul class="table">
+            {items.map((subItems) => {
+              return <li> {subItems} </li>;
+            })}
+            </ul>
+          </div>
+        );
+      })}</div>
+      <div class="container">
+        <div>
+          <h1>Your Cards:Here</h1>
+        </div>
+
+        <div class="playingCards fourColours rotateHand">
+          {cards}
+        </div>
+
+        <div class="text_box">Game not started yet</div>
+
+        <div class="color green"></div>
+      </div>
+    </div>
